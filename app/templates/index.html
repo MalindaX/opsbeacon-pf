@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpsBeacon | Incident & Service Health Tracker</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-dark text-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary bg-opacity-25 border-bottom border-secondary mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-info" href="/">
+                <i class="bi bi-radar"></i> OpsBeacon
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-success" id="health-badge"><i class="bi bi-check-circle-fill"></i> Health: OK</span>
+                <span class="badge bg-secondary">v1.0.0</span>
+                <a href="/metrics" target="_blank" class="btn btn-outline-info btn-sm">
+                    <i class="bi bi-graph-up"></i> Prometheus Metrics
+                </a>
+                <a href="/health" target="_blank" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-activity"></i> /health Probe
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Dashboard Top Banner -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light h-100">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-secondary small fw-semibold">Services Monitored</h6>
+                        <h3 class="fw-bold mb-0 text-info">4 Core Services</h3>
+                        <small class="text-secondary">auth, payment, core-api, database</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light h-100">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-secondary small fw-semibold">Pipeline State</h6>
+                        <h3 class="fw-bold mb-0 text-success">Automated CI/CD</h3>
+                        <small class="text-secondary">Jenkins & GitHub Actions</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light h-100">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-secondary small fw-semibold">Container Runtime</h6>
+                        <h3 class="fw-bold mb-0 text-primary">Docker Compose</h3>
+                        <small class="text-secondary">Multi-Container (App + Postgres)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light h-100">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-secondary small fw-semibold">Observability</h6>
+                        <h3 class="fw-bold mb-0 text-warning">Prometheus & Grafana</h3>
+                        <small class="text-secondary">5-second scrape interval</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Column: Create Incident & DevOps Testing Console -->
+            <div class="col-lg-4">
+                <!-- Log Incident Card -->
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light mb-4">
+                    <div class="card-header border-secondary bg-transparent fw-semibold">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i> Log New Incident
+                    </div>
+                    <div class="card-body">
+                        <form id="incident-form">
+                            <div class="mb-3">
+                                <label for="incident-title" class="form-label small text-secondary">Incident Title</label>
+                                <input type="text" class="form-control bg-dark text-light border-secondary" id="incident-title" placeholder="e.g. Auth Token Expiry Bug" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="incident-service" class="form-label small text-secondary">Target Service</label>
+                                <select class="form-select bg-dark text-light border-secondary" id="incident-service">
+                                    <option value="core-api">core-api</option>
+                                    <option value="auth-service">auth-service</option>
+                                    <option value="payment-gateway">payment-gateway</option>
+                                    <option value="notification-worker">notification-worker</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="incident-severity" class="form-label small text-secondary">Severity</label>
+                                <select class="form-select bg-dark text-light border-secondary" id="incident-severity">
+                                    <option value="LOW">LOW</option>
+                                    <option value="MEDIUM" selected>MEDIUM</option>
+                                    <option value="HIGH">HIGH</option>
+                                    <option value="CRITICAL">CRITICAL</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info w-100 fw-semibold">
+                                <i class="bi bi-send me-1"></i> Submit Incident
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- DevOps Metric Generator Console -->
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light">
+                    <div class="card-header border-secondary bg-transparent fw-semibold d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-cpu text-info me-2"></i> DevOps Telemetry Lab</span>
+                        <span class="badge bg-dark">Live Test</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-secondary mb-3">
+                            Generate real-time traffic to test Prometheus metric collectors and Grafana dashboard alerts.
+                        </p>
+                        <div class="d-grid gap-2">
+                            <button id="btn-load" class="btn btn-outline-light text-start btn-sm">
+                                <i class="bi bi-speedometer2 text-success me-2"></i> Simulate Latency Spike (/simulate-load)
+                            </button>
+                            <button id="btn-error" class="btn btn-outline-danger text-start btn-sm">
+                                <i class="bi bi-bug-fill text-danger me-2"></i> Trigger 500 Server Error (/simulate-error)
+                            </button>
+                            <button id="btn-refresh" class="btn btn-outline-secondary text-start btn-sm">
+                                <i class="bi bi-arrow-clockwise me-2"></i> Refresh Incident Feed
+                            </button>
+                        </div>
+                        <div id="console-output" class="mt-3 p-2 bg-black bg-opacity-50 rounded small font-monospace text-secondary" style="min-height: 50px;">
+                            > Ready for simulation commands.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Incident List Table -->
+            <div class="col-lg-8">
+                <div class="card bg-secondary bg-opacity-25 border-secondary text-light">
+                    <div class="card-header border-secondary bg-transparent d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold"><i class="bi bi-list-task me-2 text-info"></i> Incident Log Stream</span>
+                        <span class="badge bg-secondary" id="incident-count">Loading...</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover table-borderless align-middle mb-0">
+                                <thead class="border-bottom border-secondary text-secondary small text-uppercase">
+                                    <tr>
+                                        <th scope="col" class="ps-3">ID</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">Severity</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Logged At</th>
+                                        <th scope="col" class="text-end pe-3">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="incidents-body">
+                                    {% for inc in incidents %}
+                                    <tr id="row-{{ inc.id }}">
+                                        <td class="ps-3 fw-bold text-secondary">#{{ inc.id }}</td>
+                                        <td class="fw-semibold">{{ inc.title }}</td>
+                                        <td><code>{{ inc.service_name }}</code></td>
+                                        <td>
+                                            {% if inc.severity == 'CRITICAL' %}
+                                            <span class="badge bg-danger">CRITICAL</span>
+                                            {% elif inc.severity == 'HIGH' %}
+                                            <span class="badge bg-warning text-dark">HIGH</span>
+                                            {% elif inc.severity == 'MEDIUM' %}
+                                            <span class="badge bg-primary">MEDIUM</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">LOW</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if inc.status == 'RESOLVED' %}
+                                            <span class="badge bg-success-subtle text-success border border-success">RESOLVED</span>
+                                            {% else %}
+                                            <span class="badge bg-warning-subtle text-warning border border-warning">OPEN</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-secondary small">{{ inc.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                                        <td class="text-end pe-3">
+                                            {% if inc.status != 'RESOLVED' %}
+                                            <button class="btn btn-sm btn-outline-success" onclick="resolveIncident({{ inc.id }})">
+                                                Resolve
+                                            </button>
+                                            {% else %}
+                                            <i class="bi bi-check2-circle text-success"></i>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-secondary">No incidents logged yet. Create one or simulate an event!</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

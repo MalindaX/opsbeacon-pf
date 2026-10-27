@@ -1,0 +1,358 @@
+{
+    "version":  1,
+    "time":  {
+                 "to":  "now",
+                 "from":  "now-15m"
+             },
+    "templating":  {
+                       "list":  [
+
+                                ]
+                   },
+    "uid":  "opsbeacon-telemetry",
+    "title":  "OpsBeacon Telemetry",
+    "tags":  [
+                 "opsbeacon",
+                 "telemetry"
+             ],
+    "annotations":  {
+                        "list":  [
+
+                                 ]
+                    },
+    "timepicker":  {
+
+                   },
+    "timezone":  "browser",
+    "refresh":  "5s",
+    "schemaVersion":  39,
+    "editable":  true,
+    "panels":  [
+                   {
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "green"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  1,
+                                                                                                 "color":  "orange"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  5,
+                                                                                                 "color":  "red"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "reqps"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "id":  1,
+                       "gridPos":  {
+                                       "y":  0,
+                                       "w":  16,
+                                       "h":  9,
+                                       "x":  0
+                                   },
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "cfzzrduo4j474a"
+                                      },
+                       "title":  "HTTP Traffic (req/sec)",
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Requests/sec",
+                                           "datasource":  {
+                                                              "type":  "prometheus",
+                                                              "uid":  "cfzzrduo4j474a"
+                                                          },
+                                           "refId":  "A",
+                                           "expr":  "sum(rate(flask_http_request_total{job=\"opsbeacon\"}[1m]))",
+                                           "instant":  false,
+                                           "editorMode":  "code",
+                                           "range":  true
+                                       }
+                                   ],
+                       "type":  "timeseries",
+                       "options":  {
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "graphMode":  "area",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "orientation":  "auto",
+                                       "textMode":  "auto",
+                                       "colorMode":  "value",
+                                       "legend":  {
+                                                      "placement":  "bottom",
+                                                      "displayMode":  "list"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "none",
+                                                       "mode":  "single"
+                                                   }
+                                   }
+                   },
+                   {
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "green"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  1,
+                                                                                                 "color":  "orange"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  5,
+                                                                                                 "color":  "red"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "id":  2,
+                       "gridPos":  {
+                                       "y":  0,
+                                       "w":  8,
+                                       "h":  9,
+                                       "x":  16
+                                   },
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "cfzzrduo4j474a"
+                                      },
+                       "title":  "500 Errors (last 5 minutes)",
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "Errors",
+                                           "datasource":  {
+                                                              "type":  "prometheus",
+                                                              "uid":  "cfzzrduo4j474a"
+                                                          },
+                                           "refId":  "A",
+                                           "expr":  "sum(increase(flask_http_request_total{job=\"opsbeacon\",status=\"500\"}[5m])) or vector(0)",
+                                           "instant":  true,
+                                           "editorMode":  "code",
+                                           "range":  false
+                                       }
+                                   ],
+                       "type":  "stat",
+                       "options":  {
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "graphMode":  "area",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "orientation":  "auto",
+                                       "textMode":  "auto",
+                                       "colorMode":  "value",
+                                       "legend":  {
+                                                      "placement":  "bottom",
+                                                      "displayMode":  "list"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "none",
+                                                       "mode":  "single"
+                                                   }
+                                   }
+                   },
+                   {
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "green"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  1,
+                                                                                                 "color":  "orange"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  5,
+                                                                                                 "color":  "red"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "s"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "id":  3,
+                       "gridPos":  {
+                                       "y":  9,
+                                       "w":  12,
+                                       "h":  9,
+                                       "x":  0
+                                   },
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "cfzzrduo4j474a"
+                                      },
+                       "title":  "P95 Response Latency (s)",
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "P95",
+                                           "datasource":  {
+                                                              "type":  "prometheus",
+                                                              "uid":  "cfzzrduo4j474a"
+                                                          },
+                                           "refId":  "A",
+                                           "expr":  "histogram_quantile(0.95, sum by (le) (rate(flask_http_request_duration_seconds_bucket{job=\"opsbeacon\",path!=\"/health\"}[1m])))",
+                                           "instant":  true,
+                                           "editorMode":  "code",
+                                           "range":  false
+                                       }
+                                   ],
+                       "type":  "gauge",
+                       "description":  "Excludes health probes. Generate requests in the app to populate latency.",
+                       "options":  {
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "graphMode":  "area",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "orientation":  "auto",
+                                       "textMode":  "auto",
+                                       "colorMode":  "value",
+                                       "legend":  {
+                                                      "placement":  "bottom",
+                                                      "displayMode":  "list"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "none",
+                                                       "mode":  "single"
+                                                   }
+                                   }
+                   },
+                   {
+                       "fieldConfig":  {
+                                           "defaults":  {
+                                                            "color":  {
+                                                                          "mode":  "palette-classic"
+                                                                      },
+                                                            "min":  0,
+                                                            "thresholds":  {
+                                                                               "steps":  [
+                                                                                             {
+                                                                                                 "value":  null,
+                                                                                                 "color":  "green"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  1,
+                                                                                                 "color":  "orange"
+                                                                                             },
+                                                                                             {
+                                                                                                 "value":  5,
+                                                                                                 "color":  "red"
+                                                                                             }
+                                                                                         ],
+                                                                               "mode":  "absolute"
+                                                                           },
+                                                            "unit":  "short"
+                                                        },
+                                           "overrides":  [
+
+                                                         ]
+                                       },
+                       "id":  4,
+                       "gridPos":  {
+                                       "y":  9,
+                                       "w":  12,
+                                       "h":  9,
+                                       "x":  12
+                                   },
+                       "datasource":  {
+                                          "type":  "prometheus",
+                                          "uid":  "cfzzrduo4j474a"
+                                      },
+                       "title":  "Incidents Logged by Severity",
+                       "targets":  [
+                                       {
+                                           "legendFormat":  "{{severity}}",
+                                           "datasource":  {
+                                                              "type":  "prometheus",
+                                                              "uid":  "cfzzrduo4j474a"
+                                                          },
+                                           "refId":  "A",
+                                           "expr":  "sum by (severity) (opsbeacon_incidents_created_total{job=\"opsbeacon\"})",
+                                           "instant":  true,
+                                           "editorMode":  "code",
+                                           "range":  false
+                                       }
+                                   ],
+                       "type":  "stat",
+                       "description":  "Counts calls to the incident creation endpoint, including failed requests. Create an incident to populate this panel.",
+                       "options":  {
+                                       "reduceOptions":  {
+                                                             "values":  false,
+                                                             "calcs":  [
+                                                                           "lastNotNull"
+                                                                       ],
+                                                             "fields":  ""
+                                                         },
+                                       "graphMode":  "none",
+                                       "showThresholdLabels":  false,
+                                       "showThresholdMarkers":  true,
+                                       "orientation":  "auto",
+                                       "textMode":  "auto",
+                                       "colorMode":  "value",
+                                       "legend":  {
+                                                      "placement":  "bottom",
+                                                      "displayMode":  "list"
+                                                  },
+                                       "tooltip":  {
+                                                       "sort":  "none",
+                                                       "mode":  "single"
+                                                   }
+                                   }
+                   }
+               ]
+}

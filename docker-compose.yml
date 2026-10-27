@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: opsbeacon-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: opsuser
+      POSTGRES_PASSWORD: opspassword
+      POSTGRES_DB: opsbeacon_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opsuser -d opsbeacon_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    networks:
+      - opsbeacon-net
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: opsbeacon-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://opsuser:opspassword@db:5432/opsbeacon_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - opsbeacon-net
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  opsbeacon-net:
+    driver: bridge
