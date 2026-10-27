@@ -2,6 +2,22 @@
 
 OpsBeacon is a small incident management web app with a monitoring and CI/CD setup. It lets users create and resolve incidents, and exposes application metrics for monitoring.
 
+## Screenshots
+
+**Grafana dashboard**
+
+![OpsBeacon Grafana dashboard](assets/Grafana%20Dashboard.png)
+
+**Prometheus data source in Grafana**
+
+![Prometheus data source configuration](assets/prom%20data%20source.png)
+
+**CI/CD pipelines**
+
+| GitHub Actions | Jenkins |
+| --- | --- |
+| ![GitHub Actions workflow](assets/github%20actions.png) | ![Successful Jenkins build](assets/Jenkins%20Build%20Success.png) |
+
 ## Built with
 
 - Python 3.11 and Flask
