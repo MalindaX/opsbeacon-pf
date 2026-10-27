@@ -59,6 +59,7 @@ docker compose -f docker-compose.monitoring.yml up -d
 
 ## CI/CD
 
-- GitHub Actions runs lint checks and tests on pushes and pull requests to `main`.
-- On pushes to `main`, it builds and publishes the Docker image to Docker Hub.
-- The Jenkins pipeline also tests and builds the image, publishes it, and supports optional local deployment.
+- A push to GitHub triggers the Jenkins pipeline through a webhook exposed with ngrok.
+- Jenkins runs lint checks and tests, builds the Docker image, and publishes it to Docker Hub.
+- Jenkins can optionally deploy the image to the local Docker Compose setup.
+- GitHub Actions also runs lint checks and tests on pushes and pull requests to `main`, and publishes an image on pushes to `main`.
